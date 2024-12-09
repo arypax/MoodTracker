@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { ThemeContext } from "../config/ThemeContext";
 
 export default function MoodInputScreen({ user, navigation }) {
   const [mood, setMood] = useState(5);
@@ -19,6 +20,7 @@ export default function MoodInputScreen({ user, navigation }) {
   const [categories, setCategories] = useState(["Work", "Family", "Health"]);
   const [selectedCategory, setSelectedCategory] = useState("Work");
   const [date, setDate] = useState(new Date());
+  const { theme } = useContext(ThemeContext); // Подключение темы
 
   const fetchCategories = async () => {
     try {
@@ -57,28 +59,37 @@ export default function MoodInputScreen({ user, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Add Your Mood</Text>
-      <Text style={styles.label}>Mood (1-10):</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Add Your Mood</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Mood (1-10):</Text>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          { backgroundColor: theme.secondary, color: theme.text },
+        ]}
         keyboardType="numeric"
         value={String(mood)}
         onChangeText={(value) => setMood(Number(value))}
+        placeholderTextColor={theme.placeholder}
       />
 
-      <Text style={styles.label}>Category:</Text>
-      <Picker
-        selectedValue={selectedCategory}
-        onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-        style={styles.picker}
-      >
-        {categories.map((category, index) => (
-          <Picker.Item key={index} label={category} value={category} />
-        ))}
-      </Picker>
+      <Text style={[styles.label, { color: theme.text }]}>Category:</Text>
+      <View style={styles.pickerWrapper}>
+        <Picker
+          selectedValue={selectedCategory}
+          onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+          style={[
+            styles.picker,
+            { backgroundColor: theme.secondary, color: theme.text },
+          ]}
+        >
+          {categories.map((category, index) => (
+            <Picker.Item key={index} label={category} value={category} />
+          ))}
+        </Picker>
+      </View>
 
-      <Text style={styles.label}>Date:</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Date:</Text>
       <DatePicker
         selected={date}
         onChange={(newDate) => setDate(newDate)}
@@ -86,22 +97,28 @@ export default function MoodInputScreen({ user, navigation }) {
         dateFormat="yyyy/MM/dd"
       />
 
-      <Text style={styles.label}>Note:</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Note:</Text>
       <TextInput
-        style={styles.textArea}
+        style={[
+          styles.textArea,
+          { backgroundColor: theme.secondary, color: theme.text },
+        ]}
         multiline
         numberOfLines={4}
         placeholder="Add a note (optional)"
         value={note}
         onChangeText={setNote}
+        placeholderTextColor={theme.placeholder}
       />
 
-      <Button title="Save Mood" onPress={saveMood} color="#1E90FF" />
-      <Button
-        title="Cancel"
-        onPress={() => navigation.goBack()}
-        color="#FF6347"
-      />
+      <View style={styles.buttonContainer}>
+        <Button title="Save Mood" onPress={saveMood} color={theme.primary} />
+        <Button
+          title="Cancel"
+          onPress={() => navigation.goBack()}
+          color={theme.error}
+        />
+      </View>
     </View>
   );
 }
@@ -110,7 +127,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 24,
@@ -125,24 +141,28 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     marginTop: 5,
   },
-  picker: {
+  pickerWrapper: {
     borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 5,
     marginTop: 5,
-    padding: 5,
+  },
+  picker: {
+    width: "100%",
   },
   textArea: {
     borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     marginTop: 5,
     textAlignVertical: "top",
+  },
+  buttonContainer: {
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

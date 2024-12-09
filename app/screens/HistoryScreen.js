@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  Alert,
+  Button,
 } from "react-native";
 import { db } from "../config/firebase";
 import {
@@ -13,10 +15,14 @@ import {
   where,
   orderBy,
   getDocs,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
+import { ThemeContext } from "../config/ThemeContext"; // Импорт контекста темы
 
 export default function HistoryScreen({ user, navigation }) {
   const [moods, setMoods] = useState([]);
+  const { theme } = useContext(ThemeContext); // Используем текущую тему
 
   useEffect(() => {
     const fetchMoods = async () => {
@@ -48,29 +54,59 @@ export default function HistoryScreen({ user, navigation }) {
     navigation.navigate("EditMood", { mood: item });
   };
 
+  const handleDeleteMood = async (id) => {
+    try {
+      await deleteDoc(doc(db, "moods", id)); // Удаление записи из Firestore
+      setMoods(moods.filter((mood) => mood.id !== id)); // Удаление записи из локального состояния
+      Alert.alert("Success", "Mood deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting mood:", error.message);
+      Alert.alert("Error", "Failed to delete mood.");
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Mood History</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Your Mood History</Text>
       {moods.length === 0 ? (
-        <Text style={styles.text}>No moods recorded yet.</Text>
+        <Text style={[styles.text, { color: theme.text }]}>No moods recorded yet.</Text>
       ) : (
         <FlatList
           data={moods}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.item}
-              onLongPress={() => handleEditMood(item)}
+            <View
+              style={[
+                styles.item,
+                { backgroundColor: theme.cardBackground },
+              ]}
             >
-              <Text style={styles.date}>
+              <Text style={[styles.date, { color: theme.text }]}>
                 {new Date(item.timestamp).toLocaleString()}
               </Text>
-              <Text style={styles.mood}>Mood: {item.mood}</Text>
-              <Text style={styles.category}>
+              <Text style={[styles.mood, { color: theme.primary }]}>
+                Mood: {item.mood}
+              </Text>
+              <Text style={[styles.category, { color: theme.text }]}>
                 Category: {item.category || "No Category"}
               </Text>
-              <Text style={styles.note}>{item.note || "No Notes"}</Text>
-            </TouchableOpacity>
+              <Text style={[styles.note, { color: theme.text }]}>
+                {item.note || "No Notes"}
+              </Text>
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  title="Edit"
+                  onPress={() => handleEditMood(item)}
+                  color={theme.primary}
+                />
+                <Button
+                  title="Delete"
+                  onPress={() => handleDeleteMood(item.id)}
+                  color={theme.danger}
+                />
+              </View>
+            </View>
           )}
         />
       )}
@@ -81,7 +117,6 @@ export default function HistoryScreen({ user, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
     padding: 20,
   },
   title: {
@@ -89,40 +124,34 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
-    color: "#333",
   },
   text: {
     fontSize: 16,
     textAlign: "center",
-    color: "#555",
   },
   item: {
-    backgroundColor: "#fff",
     padding: 15,
     marginBottom: 10,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
   },
   date: {
     fontSize: 14,
-    color: "#555",
   },
   mood: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#1E90FF",
   },
   category: {
     fontSize: 16,
-    color: "#555",
     fontStyle: "italic",
   },
   note: {
     fontSize: 14,
-    color: "#333",
     marginTop: 5,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
   },
 });

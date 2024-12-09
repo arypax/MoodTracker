@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "./screens/LoginScreen";
@@ -7,16 +7,28 @@ import MoodInputScreen from "./screens/MoodInputScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import EditMoodScreen from "./screens/EditMoodScreen";
 import ManageCategoriesScreen from "./screens/ManageCategoriesScreen";
-import GoalsScreen from "./screens/GoalsScreen"; // Подключаем GoalsScreen
+import GoalsScreen from "./screens/GoalsScreen";
+import { ThemeProvider, ThemeContext } from "./config/ThemeContext"; // Импортируем тему
 
 const Stack = createStackNavigator();
 
-export default function App() {
-  const [user, setUser] = useState(null);
+function AppNavigator({ user, setUser }) {
+  const { theme } = useContext(ThemeContext); // Используем тему из контекста
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "Home" : "Login"}>
+      <Stack.Navigator
+        initialRouteName={user ? "Home" : "Login"}
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: theme.primary,
+          },
+          headerTintColor: theme.text,
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      >
         {user ? (
           <>
             <Stack.Screen
@@ -42,7 +54,9 @@ export default function App() {
             <Stack.Screen
               name="ManageCategories"
               options={{ title: "Manage Categories" }}
-              children={(props) => <ManageCategoriesScreen {...props} user={user} />}
+              children={(props) => (
+                <ManageCategoriesScreen {...props} user={user} />
+              )}
             />
             <Stack.Screen
               name="Goals"
@@ -59,5 +73,15 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+export default function App() {
+  const [user, setUser] = useState(null);
+
+  return (
+    <ThemeProvider>
+      <AppNavigator user={user} setUser={setUser} />
+    </ThemeProvider>
   );
 }

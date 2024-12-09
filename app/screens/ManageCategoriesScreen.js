@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -10,17 +10,17 @@ import {
 } from "react-native";
 import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { ThemeContext } from "../config/ThemeContext"; // Подключаем контекст темы
 
 export default function ManageCategoriesScreen({ user }) {
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
+  const { theme } = useContext(ThemeContext); // Используем текущую тему
 
   // Fetch categories from Firestore
   const fetchCategories = async () => {
     try {
-      const querySnapshot = await getDocs(
-        collection(db, "categories")
-      );
+      const querySnapshot = await getDocs(collection(db, "categories"));
       const userCategories = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -66,24 +66,25 @@ export default function ManageCategoriesScreen({ user }) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Manage Categories</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Manage Categories</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.secondary, color: theme.text }]}
         placeholder="New category name"
+        placeholderTextColor={theme.placeholder}
         value={newCategory}
         onChangeText={setNewCategory}
       />
-      <Button title="Add Category" onPress={addCategory} color="#1E90FF" />
+      <Button title="Add Category" onPress={addCategory} color={theme.primary} />
 
       <FlatList
         data={categories}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.categoryContainer}>
-            <Text style={styles.categoryText}>{item.name}</Text>
+          <View style={[styles.categoryContainer, { borderBottomColor: theme.border }]}>
+            <Text style={[styles.categoryText, { color: theme.text }]}>{item.name}</Text>
             <TouchableOpacity onPress={() => deleteCategory(item.id)}>
-              <Text style={styles.deleteText}>Delete</Text>
+              <Text style={[styles.deleteText, { color: theme.error }]}>Delete</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
   },
   title: {
     fontSize: 20,
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
@@ -116,12 +115,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
   },
   categoryText: {
     fontSize: 16,
   },
   deleteText: {
-    color: "red",
+    fontSize: 16,
   },
 });
