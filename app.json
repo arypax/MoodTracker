@@ -1,5 +1,6 @@
 {
   "expo": {
+    "entryPoint" : "app/index.js",
     "name": "MoodTrackerEXPO",
     "slug": "MoodTrackerEXPO",
     "version": "1.0.0",
