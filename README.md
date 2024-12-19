@@ -1,50 +1,34 @@
-# Welcome to your Expo app 👋
+# MoodTracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**MoodTracker** is a mobile application for tracking emotional state. It allows users to record their mood on a daily basis, analyze dynamics and receive recommendations to improve their emotional state.
 
-## Get started
+## Main functions
 
-1. Install dependencies
+- **Entering the mood:** The ability to enter mood data through a scale from 1 to 10 or choose from preset emotions (joy, sadness, stress, etc.).
+- **Graphs and analytics:** View mood changes over a week, month, and other time periods.
+- **Personalized Tips:** Recommendations such as "Try meditation" or "Go for a walk".
+- **Mood history:** View recordings with time and reasons for mood changes.
+- **Setting up emotion categories:** The ability to add your own categories of emotions.
+- **Mood goals:** Setting goals, such as "reduce stress levels" or "increase joy."
 
-   ```bash
-   npm install
-   ```
+## Technologies
 
-2. Start the app
+- **React Native** — for application development.
+- **Expo** — for quick launch and testing.
+- **Firebase** — for user management and data storage.
+- **React Navigation** — to control on-screen navigation.
 
-   ```bash
-    npx expo start
-   ```
+## Screenshots of the application:
+![image](https://github.com/user-attachments/assets/808a5deb-3706-42d5-81a9-7e7fe502f083)
+![image](https://github.com/user-attachments/assets/d53449c6-7000-442c-ad08-7b055a31d2c2)
+![image](https://github.com/user-attachments/assets/a741edbb-d90a-43a7-bb58-99bf9b5bf634)
+![image](https://github.com/user-attachments/assets/91b876cc-3a1c-4e61-ab7e-e794e6136957)
+![image](https://github.com/user-attachments/assets/1bc8465a-792e-48d5-9195-a88d8735f665)
+![image](https://github.com/user-attachments/assets/ef276a7a-831d-45f2-9b71-1d41ffd32736)
+![image](https://github.com/user-attachments/assets/0334cc1e-9d57-4ddc-bc1b-5d36c891a2ae)
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+The author of the project:
+Vladislav Pineker is a 2nd year student at the International University of Information Technology.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The project was developed as part of a course work on the discipline "Mobile development on Android".
