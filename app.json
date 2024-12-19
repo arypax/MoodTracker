@@ -1,6 +1,6 @@
 {
   "expo": {
-    "entryPoint" : "app/index.js",
+    "entryPoint": "app/index.js",
     "name": "MoodTrackerEXPO",
     "slug": "MoodTrackerEXPO",
     "version": "1.0.0",
@@ -10,7 +10,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arypax.MoodTrackerEXPO"
     },
     "android": {
       "adaptiveIcon": {
@@ -33,10 +34,19 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7aa4ed37-8a8e-44d3-a388-45067a31a6ea"
+      }
     }
   }
 }
